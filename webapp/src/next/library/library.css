@@ -1,0 +1,1024 @@
+/* E2 配方库（三大分类）样式 — 整页照抄旧配方库（审美基线铁律，legacy.css 对应类原值搬运）：
+   侧栏两级树+计数 = .sidebar 系；大搜索框 = .search-bar；蓝大类横幅 = .section-header；
+   浅蓝中类横幅 = .group-header；三列卡片 = .recipe-grid/.recipe-card 系；
+   绿钮 = .copy-btn；橙钮位（原入车）= .cart-add-btn 原样、文案改「选入编辑器」（差异点2）；
+   tag 词典 = .tag-col-table 系；懒狗图墙 = 图墙语言（.lz 交互，壳色跟配方库）；
+   角色编辑器 = .char-mgr 系。色值经 tokens.css 映射（同 legacy 原值）。 */
+
+.knx .lib-layout {
+  /* legacy :root 中 tokens.css 未收编的三个值，原值补齐 */
+  --lib-bg-active: #e8e5e0;
+  --lib-text-muted: #aaaaaa;
+  --lib-amber-hover: #d09020;
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+}
+
+/* === 侧栏（= legacy .sidebar 系原样） === */
+.knx .lib-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+}
+
+.knx .lib-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--knx-line);
+  flex-shrink: 0;
+}
+
+.knx .lib-sidebar-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--knx-nav-text);
+}
+
+/* 大类 chips（= .sidebar-block-btn 原样，block 层换成三大类） */
+.knx .lib-sb-blocks {
+  display: flex;
+  gap: 4px;
+  padding: 10px 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--knx-line);
+  flex-shrink: 0;
+}
+
+.knx .lib-sb-block-btn {
+  padding: 5px 12px;
+  background: var(--knx-bg);
+  border: 1px solid var(--knx-line);
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--knx-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.knx .lib-sb-block-btn:hover { border-color: var(--knx-nav); color: var(--knx-nav); }
+.knx .lib-sb-block-btn.active {
+  background: var(--knx-nav);
+  color: white;
+  border-color: var(--knx-nav);
+  font-weight: 600;
+}
+.knx .lib-sb-block-btn.active .lib-count { color: rgba(255, 255, 255, 0.8); }
+
+/* 计数右对齐（= .sidebar-count 原样） */
+.knx .lib-count {
+  font-size: 0.68rem;
+  color: var(--lib-text-muted);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+/* 两级树（= .sidebar-tree / -cat-btn / -group-btn 原样） */
+.knx .lib-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.knx .lib-cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 14px;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--knx-text);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+.knx .lib-cat-btn:hover { background: var(--knx-surface-3); }
+.knx .lib-cat-btn.active {
+  color: var(--knx-nav-text);
+  border-left-color: var(--knx-nav);
+  background: var(--knx-nav-dim);
+}
+
+.knx .lib-cat-arrow {
+  font-size: 0.7rem;
+  color: var(--lib-text-muted);
+  width: 10px;
+  flex-shrink: 0;
+}
+
+.knx .lib-cat-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knx .lib-groups { padding: 2px 0; }
+
+.knx .lib-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 14px 5px 33px;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  font-size: 0.78rem;
+  color: var(--knx-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+.knx .lib-group-btn:hover { background: var(--knx-surface-3); color: var(--knx-text); }
+.knx .lib-group-btn.active {
+  color: var(--knx-nav-text);
+  background: var(--knx-nav-dim);
+  border-left-color: var(--knx-nav);
+  font-weight: 600;
+}
+
+.knx .lib-group-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knx .lib-sb-footer {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--knx-line);
+}
+
+.knx .lib-scroll-top {
+  width: 100%;
+  padding: 6px;
+  background: var(--knx-bg);
+  border: 1px solid var(--knx-line);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--knx-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.knx .lib-scroll-top:hover { border-color: var(--knx-nav); color: var(--knx-nav); }
+
+/* === 主区 === */
+.knx .lib-content {
+  flex: 1;
+  min-width: 0;
+  padding-left: 20px;
+}
+
+/* 大搜索框（= .search-bar 原样） */
+.knx .lib-search {
+  position: relative;
+  margin-bottom: 12px;
+}
+.knx .lib-search input {
+  width: 100%;
+  padding: 10px 38px 10px 16px;
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 20px;
+  color: var(--knx-text);
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.25s var(--knx-ease);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.knx .lib-search input:focus {
+  border-color: var(--knx-nav);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.knx .lib-search input::placeholder { color: var(--lib-text-muted); }
+.knx .lib-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--knx-surface-3);
+  border: none;
+  color: var(--knx-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.knx .lib-search-clear:hover { background: var(--lib-bg-active); color: var(--knx-text); }
+
+/* 蓝色大类横幅（= .section-header 原样） */
+.knx .lib-section-header {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--knx-nav), #60a5fa);
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+}
+
+/* 浅蓝中类横幅（= .group-header 原样） */
+.knx .lib-mid-section { margin-bottom: 24px; }
+.knx .lib-group-header {
+  padding: 6px 12px;
+  border-left: 4px solid var(--knx-info);
+  background: var(--knx-info-soft);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--knx-text);
+  margin-bottom: 10px;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.knx .lib-group-header .lib-header-note {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--lib-text-muted);
+}
+.knx .lib-header-count {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--lib-text-muted);
+  margin-left: 4px;
+}
+
+/* 三级小组头（中类内的库内分组，字号再降一级） */
+.knx .lib-subhead {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--knx-muted);
+  margin: 12px 0 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* 大类分组自动配色（无需手设·自然区分）：左色条 + 色相化子标题；置顶主力带 📌 */
+.knx .lib-cat-group {
+  border-left: 4px solid hsl(var(--g-hue) 62% 55% / .6);
+  padding-left: 12px;
+  margin-bottom: 10px;
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(90deg, hsl(var(--g-hue) 60% 50% / .06), transparent 40%);
+}
+.knx .lib-cat-group > .lib-subhead {
+  color: hsl(var(--g-hue) 58% 52%);
+  font-size: 0.88rem;
+  font-weight: 800;
+  align-items: center;
+}
+.knx .lib-pin { font-size: 0.85rem; margin-right: 2px; }
+
+/* 三列卡片（= .recipe-grid / .recipe-card 系原样；Owner：稍微大一点） */
+.knx .lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 22px;
+}
+
+.knx .lib-card {
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s var(--knx-ease);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+.knx .lib-card:hover {
+  border-color: var(--knx-accent);
+  box-shadow: 0 16px 24px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--knx-accent);
+  transform: translateY(-6px);
+}
+
+.knx .lib-card-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--knx-bg);
+  position: relative;
+}
+.knx .lib-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.5s var(--knx-ease);
+}
+.knx .lib-card-image:hover img { transform: scale(1.05); }
+
+.knx .lib-card-info { padding: 14px 16px; }
+
+.knx .lib-card-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin: 0 0 6px;
+  line-height: 1.3;
+  color: var(--knx-text);
+}
+
+.knx .lib-card-group-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  background: var(--knx-accent-soft);
+  color: var(--knx-accent-text);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.knx .lib-card-tags {
+  background: var(--knx-bg);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  color: var(--knx-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  margin: 0 0 8px;
+  max-height: 80px;
+  overflow-y: auto;
+  line-height: 1.4;
+  border: 1px solid var(--knx-line);
+}
+.knx .lib-card-tags.is-empty {
+  color: var(--lib-text-muted);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.knx .lib-card-note {
+  font-size: 0.75rem;
+  color: var(--lib-text-muted);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.knx .lib-btn-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* 绿钮=复制（= .copy-btn 原样） */
+.knx .lib-copy-btn {
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--knx-ok);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s var(--knx-ease);
+  box-shadow: 0 2px 4px rgba(59, 165, 93, 0.2);
+}
+.knx .lib-copy-btn:hover { background: #2f9050; transform: translateY(-1px); box-shadow: 0 3px 6px rgba(59, 165, 93, 0.3); }
+.knx .lib-copy-btn.copied { background: var(--knx-muted); color: white; box-shadow: none; }
+
+/* 橙钮位=选入编辑器（= .cart-add-btn 原样，cart 已废，差异点2） */
+.knx .lib-pick-btn {
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--knx-amber);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s var(--knx-ease);
+  box-shadow: 0 2px 4px rgba(232, 168, 48, 0.2);
+}
+.knx .lib-pick-btn:hover { background: var(--lib-amber-hover); transform: translateY(-1px); box-shadow: 0 3px 6px rgba(232, 168, 48, 0.3); }
+
+/* 变体（衣服套装 10 视角，= .recipe-variants 系原样） */
+.knx .lib-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.knx .lib-variant { display: flex; flex-direction: column; gap: 4px; }
+.knx .lib-variant-header { display: flex; align-items: center; gap: 8px; }
+.knx .lib-variant-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--knx-text);
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--knx-bg);
+  border: 1px solid var(--knx-line);
+}
+
+.knx .lib-empty-hint {
+  color: var(--lib-text-muted);
+  text-align: center;
+  padding: 24px 0;
+  font-size: 0.85rem;
+}
+
+/* legacy 存档折叠区（差异点：只读，不做编辑界面） */
+.knx .lib-legacy {
+  border: 1px dashed var(--knx-line-strong);
+  border-radius: 8px;
+  background: var(--knx-surface);
+  padding: 4px 12px 10px;
+}
+.knx .lib-legacy summary {
+  cursor: pointer;
+  padding: 8px 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--knx-muted);
+}
+.knx .lib-legacy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--knx-line);
+  font-size: 0.78rem;
+}
+.knx .lib-legacy-row:last-child { border-bottom: none; }
+.knx .lib-legacy-name { flex: 0 0 160px; font-weight: 600; color: var(--knx-text); }
+.knx .lib-legacy-tags {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.72rem;
+  color: var(--knx-muted);
+}
+
+/* === tag 词典（= .tag-single-wrap / .tag-col-table 系原样；查阅性质，禁重UI） === */
+.knx .lib-tag-wrap {
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  overflow: hidden;
+  background: var(--knx-surface);
+  margin-bottom: 14px;
+}
+.knx .lib-tag-header {
+  background: var(--knx-nav);
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.knx .lib-tag-header .lib-header-count { color: rgba(255, 255, 255, 0.85); }
+.knx .lib-tag-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.knx .lib-tag-table tr:nth-child(even) { background: var(--knx-surface); }
+.knx .lib-tag-table tr:nth-child(odd) { background: var(--knx-bg); }
+.knx .lib-tag-table tr:hover { background: #e8f0fe; }
+.knx .lib-tag-table tr.copied { background: var(--knx-ok-soft); }
+.knx .lib-tag-table td {
+  padding: 3px 8px;
+  font-size: 0.8rem;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.knx .ltg-zh { color: var(--knx-text); }
+.knx .ltg-en { font-family: 'Consolas', 'Fira Code', monospace; font-size: 0.75rem; color: var(--knx-muted); }
+.knx .ltg-count { text-align: right; font-size: 0.72rem; color: var(--lib-text-muted); font-variant-numeric: tabular-nums; }
+.knx .ltg-btns { display: flex; gap: 4px; justify-content: flex-end; }
+.knx .ltg-btns button {
+  padding: 1px 8px;
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+.knx .ltg-copy { background: var(--knx-ok); }
+.knx .ltg-copy:hover { background: #2f9050; }
+.knx .ltg-pick { background: var(--knx-amber); }
+.knx .ltg-pick:hover { background: var(--lib-amber-hover); }
+
+/* tag 悬浮预览（数据展示铁律：缩略图悬浮才显；= .lz-zoom 思路） */
+.knx .lib-tag-preview {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+}
+.knx .lib-tag-preview img {
+  max-width: 240px;
+  max-height: 320px;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--knx-line);
+  background: var(--knx-surface);
+}
+.knx .lib-tag-preview .lib-tag-preview-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.7rem;
+  color: white;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 6px;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+/* === 懒狗库图墙（图墙语言=LazyBrowser 已验收交互，壳色跟配方库） === */
+.knx .lib-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.knx .lib-wall-card {
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  text-align: left;
+  padding: 0;
+}
+.knx .lib-wall-card:hover { border-color: var(--knx-line-strong); transform: translateY(-1px); box-shadow: var(--knx-shadow-card); }
+.knx .lib-wall-card.sel { border-color: var(--knx-nav); box-shadow: 0 0 0 1px var(--knx-nav); }
+
+.knx .lib-wall-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  background: var(--knx-bg);
+}
+.knx .lib-wall-noimg {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lib-text-muted);
+  font-size: 0.75rem;
+  background: var(--knx-bg);
+}
+
+.knx .lib-wall-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0 0 9px 0;
+  background: #1f6feb;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 9px;
+  letter-spacing: 0.02em;
+}
+
+.knx .lib-wall-title {
+  padding: 6px 8px 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--knx-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.knx .lib-wall-sub {
+  padding: 0 8px 6px;
+  font-size: 0.7rem;
+  color: var(--lib-text-muted);
+}
+.knx .lib-wall-btns {
+  display: flex;
+  gap: 4px;
+  padding: 0 8px 8px;
+}
+.knx .lib-wall-btns button {
+  flex: 1;
+  padding: 3px 0;
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+.knx .lib-wall-copy { background: var(--knx-ok); }
+.knx .lib-wall-copy:hover { background: #2f9050; }
+.knx .lib-wall-pick { background: var(--knx-amber); }
+.knx .lib-wall-pick:hover { background: var(--lib-amber-hover); }
+
+/* 悬浮跟随大图（= .lz-zoom 原样，壳外色跟配方库） */
+.knx .lib-zoom { position: fixed; z-index: 200; pointer-events: none; }
+.knx .lib-zoom img {
+  max-width: 32vw;
+  max-height: 64vh;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.13);
+  background: #0f1115;
+}
+
+/* 套图展开的帧区 */
+.knx .lib-frames {
+  grid-column: 1 / -1;
+  border: 1px solid var(--knx-nav);
+  border-radius: 10px;
+  background: var(--knx-nav-dim);
+  padding: 10px;
+  margin: -2px 0 4px;
+}
+.knx .lib-frames-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--knx-nav-text);
+  margin-bottom: 8px;
+}
+.knx .lib-frames .lib-wall { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+
+/* === 角色大类（= .char-mgr 系照抄，卡内嵌衣柜） === */
+.knx .lib-char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.knx .lib-char-card {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  padding: 10px;
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  transition: all 0.3s var(--knx-ease);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  min-height: 96px;
+}
+.knx .lib-char-card:hover {
+  border-color: var(--knx-accent);
+  box-shadow: 0 16px 24px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--knx-accent);
+  transform: translateY(-2px);
+}
+.knx .lib-char-card.active {
+  border-color: var(--knx-accent);
+  background: var(--knx-accent-soft);
+  box-shadow: 0 0 0 1px var(--knx-accent) inset;
+}
+.knx .lib-char-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.knx .lib-char-card-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--knx-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.knx .lib-char-card-meta { font-size: 12px; color: var(--knx-muted); }
+.knx .lib-char-card-note {
+  font-size: 11px;
+  color: var(--lib-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.knx .lib-char-card .lib-btn-row { margin: auto 0 0; }
+
+/* 角色编辑器主体（= .char-mgr-main / -editor 系） */
+.knx .lib-cm-main {
+  background: var(--knx-surface);
+  border: 1px solid var(--knx-line);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.knx .lib-cm-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--knx-line);
+}
+.knx .lib-cm-header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.knx .lib-cm-header-row { display: flex; align-items: center; gap: 12px; }
+.knx .lib-cm-name-input {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-bg);
+  color: var(--knx-text);
+}
+.knx .lib-cm-name-input:focus { outline: none; border-color: var(--knx-accent); }
+.knx .lib-cm-note-input {
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-bg);
+  color: var(--knx-muted);
+}
+.knx .lib-cm-note-input:focus { outline: none; border-color: var(--knx-accent); }
+
+.knx .lib-cm-section { display: flex; flex-direction: column; gap: 8px; }
+.knx .lib-cm-section-title { font-size: 15px; font-weight: 600; margin: 0; color: var(--knx-text); }
+.knx .lib-cm-section-hint { font-size: 12px; color: var(--lib-text-muted); margin: 0 0 4px; }
+
+/* 10 组合矩阵 */
+.knx .lib-cm-matrix { display: flex; flex-direction: column; gap: 8px; }
+.knx .lib-cm-matrix-header,
+.knx .lib-cm-matrix-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr;
+  gap: 8px;
+}
+.knx .lib-cm-matrix-col-label,
+.knx .lib-cm-matrix-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--knx-text);
+  justify-content: center;
+}
+.knx .lib-cm-matrix-col-hint,
+.knx .lib-cm-matrix-row-hint { color: var(--lib-text-muted); font-size: 11px; font-weight: 400; }
+.knx .lib-cm-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-bg);
+}
+.knx .lib-cm-cell.disabled { opacity: 0.6; background: var(--knx-surface-3); }
+.knx .lib-cm-cell.over-warn { border-color: var(--knx-amber); }
+.knx .lib-cm-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+.knx .lib-cm-cell-toggle { display: flex; align-items: center; gap: 6px; color: var(--knx-text); }
+.knx .lib-cm-cell-key { font-size: 11px; color: var(--knx-muted); }
+.knx .lib-cm-required-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  background: var(--knx-accent-soft);
+  color: var(--knx-accent-text);
+  border-radius: 8px;
+  font-weight: 600;
+}
+.knx .lib-cm-copy-full {
+  font-size: 11px;
+  padding: 2px 6px;
+  color: var(--knx-muted);
+  white-space: nowrap;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.knx .lib-cm-copy-full:hover { color: var(--knx-accent); }
+.knx .lib-cm-textarea {
+  width: 100%;
+  resize: vertical;
+  font-family: 'Consolas', 'Menlo', monospace;
+  font-size: 12px;
+  padding: 6px 8px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-surface);
+  color: var(--knx-text);
+  line-height: 1.4;
+  min-height: 48px;
+}
+.knx .lib-cm-textarea:focus { outline: none; border-color: var(--knx-accent); }
+.knx .lib-cm-textarea:disabled { background: var(--knx-surface-3); cursor: not-allowed; }
+.knx .lib-cm-cell-stats { font-size: 11px; color: var(--lib-text-muted); }
+.knx .lib-cm-token-warn { color: var(--knx-amber); font-weight: 600; }
+.knx .lib-cm-matrix-toggle {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--knx-muted);
+  cursor: pointer;
+}
+.knx .lib-cm-matrix-toggle:hover { border-color: var(--knx-nav); color: var(--knx-nav); }
+
+/* 衣柜区段（= .char-mgr-section-outfits 浅色面板，卡内嵌该角色绑定衣柜=原则⑦） */
+.knx .lib-cm-outfits-panel {
+  margin-top: 6px;
+  padding: 14px 16px 16px;
+  border: 1px solid var(--knx-line);
+  border-radius: 8px;
+  background: var(--knx-surface-3);
+}
+.knx .lib-cm-outfits-panel .lib-cm-section-title {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--knx-accent-soft);
+}
+.knx .lib-cm-outfits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.knx .lib-cm-outfit {
+  border: 1px solid var(--knx-line);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--knx-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.knx .lib-cm-outfit:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.knx .lib-cm-outfit.is-expanded { grid-column: 1 / -1; }
+.knx .lib-cm-outfit.is-default {
+  border-color: var(--knx-accent);
+  box-shadow: 0 0 0 1px var(--knx-accent-soft) inset, 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.knx .lib-cm-outfit-header { display: flex; gap: 10px; align-items: flex-start; }
+.knx .lib-cm-outfit-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.knx .lib-cm-outfit-name {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-surface);
+  color: var(--knx-text);
+}
+.knx .lib-cm-outfit-name:focus { outline: none; border-color: var(--knx-accent); }
+.knx .lib-cm-outfit-note,
+.knx .lib-cm-outfit-negative {
+  font-size: 12px;
+  padding: 3px 6px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-surface);
+  color: var(--knx-muted);
+}
+.knx .lib-cm-outfit-negative { color: var(--knx-danger); }
+.knx .lib-cm-outfit-negative::placeholder { color: var(--lib-text-muted); }
+.knx .lib-cm-outfit-negative:focus { outline: none; border-color: var(--knx-danger); }
+.knx .lib-cm-outfit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.knx .lib-cm-default-radio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--knx-muted);
+  cursor: pointer;
+}
+
+/* 角色级负面词块 */
+.knx .lib-cm-negative { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.knx .lib-cm-negative-label { font-size: 13px; font-weight: 600; display: flex; flex-direction: column; gap: 2px; }
+.knx .lib-cm-negative-hint { font-size: 11px; font-weight: 400; color: var(--lib-text-muted); line-height: 1.5; }
+.knx .lib-cm-negative-textarea {
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-surface);
+  color: var(--knx-danger);
+  padding: 6px 8px;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 48px;
+}
+.knx .lib-cm-negative-textarea:focus { outline: none; border-color: var(--knx-danger); }
+
+/* 预览图 / 同步指示 / 预算警告 / 底部（= char-mgr 同名件） */
+.knx .lib-cm-preview {
+  flex: none;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-6);
+  overflow: hidden;
+  background: var(--knx-surface-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+.knx .lib-cm-preview.readonly { cursor: default; }
+.knx .lib-cm-preview:not(.readonly):hover { border-color: var(--knx-accent); }
+.knx .lib-cm-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.knx .lib-cm-preview-placeholder { color: var(--lib-text-muted); font-size: 12px; text-align: center; padding: 4px; }
+
+.knx .lib-cm-sync {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+}
+.knx .lib-cm-sync.idle { color: var(--lib-text-muted); }
+.knx .lib-cm-sync.pending { color: var(--knx-amber); background: var(--knx-amber-soft); }
+.knx .lib-cm-sync.saved { color: var(--knx-ok); background: var(--knx-ok-soft); }
+.knx .lib-cm-sync.error { color: var(--knx-danger); background: var(--knx-danger-soft); }
+
+.knx .lib-cm-budget-warn {
+  padding: 8px 12px;
+  background: var(--knx-amber-soft);
+  border: 1px solid var(--knx-amber);
+  border-radius: var(--knx-radius-6);
+  color: var(--lib-amber-hover);
+  font-size: 13px;
+}
+
+.knx .lib-cm-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--knx-line);
+}
+
+/* 响应式（跟旧版断点语义） */
+@media (max-width: 900px) {
+  .knx .lib-layout { flex-direction: column; }
+  .knx .lib-sidebar { width: 100%; position: static; max-height: 300px; }
+  .knx .lib-content { padding-left: 0; }
+  .knx .lib-cm-matrix-header, .knx .lib-cm-matrix-row { grid-template-columns: 1fr; }
+  .knx .lib-cm-outfits { grid-template-columns: 1fr; }
+}

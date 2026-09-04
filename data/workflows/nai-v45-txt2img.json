@@ -1,0 +1,66 @@
+{
+  "_comment": "NAI V4.5 Full txt2img — 对照官网默认配置 (832x1216 Normal Portrait, 28 steps, CFG 5, Euler+Karras)。前提: ComfyUI 已安装 bedovyy/ComfyUI_NAIDGenerator 节点包且 ComfyUI 根目录 .env 中已配置 NAI_ACCESS_TOKEN。",
+  "_format_warning": "本文件为 ComfyUI API Format (节点ID为key的dict)，**不支持直接拖入画布**。仅作为参数参考。要在 ComfyUI 中使用，请按 _setup_steps 手动搭建 3 个节点。",
+  "_setup_steps": [
+    "1. 在 ComfyUI 画布右键 -> Add Node -> NovelAI -> ModelOption ✒️🅝🅐🅘",
+    "2. 右键 -> Add Node -> NovelAI -> Generate ✒️🅝🅐🅘",
+    "3. 右键 -> Add Node -> Image -> SaveImage",
+    "4. 连线: ModelOption.NAID_OPTION (输出) -> Generate.option (输入)",
+    "5. 连线: Generate.IMAGE (输出) -> SaveImage.images (输入)",
+    "6. 按下方 1/2/3 节点的 inputs 字段照抄参数到对应控件",
+    "7. Queue Prompt 出图。生成结果自动存到 ComfyUI/output/NAI_autosave/"
+  ],
+  "_official_mapping": {
+    "Model": "node 1 ModelOptionNAID.model -> 官网 'Model' 下拉",
+    "Image Size": "node 2 width/height -> 官网 'Image Size' Normal Portrait = 832x1216",
+    "Steps": "node 2 steps -> 官网 'Steps' (Anlas-free 上限 28)",
+    "Prompt Guidance": "node 2 cfg -> 官网 'Prompt Guidance' (CFG)",
+    "Prompt Guidance Rescale": "node 2 cfg_rescale -> 官网同名滑块",
+    "Sampler": "node 2 sampler -> 官网 'Sampling' k_euler=Euler",
+    "Noise Schedule": "node 2 scheduler -> 官网 'Noise Schedule' karras=Karras",
+    "Seed": "node 2 seed -> 官网 'Seed' (0=随机)",
+    "Variety+": "node 2 variety -> 官网 'Variety+' 开关",
+    "Decrisper": "node 2 decrisper -> 官网 'Decrisper' 开关",
+    "SMEA": "node 2 smea -> 官网仅 V3 有效, V4/V4.5 应保持 none",
+    "Uncondition Scale": "node 2 uncond_scale -> 官网 'Negative Prompt Strength' (默认1.0)",
+    "Anlas Free 限制": "node 2 limit_opus_free=false -> 关闭则按实际 Anlas 扣费; true 则强制小图免费档"
+  },
+  "1": {
+    "inputs": {
+      "model": "nai-diffusion-4-5-full"
+    },
+    "class_type": "ModelOptionNAID",
+    "_meta": {"title": "NAI 模型选择 (V4.5 Full)"}
+  },
+  "2": {
+    "inputs": {
+      "limit_opus_free": false,
+      "width": 832,
+      "height": 1216,
+      "positive": "1girl, solo, looking at viewer, white shirt, classroom, best quality, amazing quality, very aesthetic, absurdres",
+      "negative": "lowres, worst quality, bad anatomy, bad hands, jpeg artifacts, signature, watermark, blurry",
+      "steps": 28,
+      "cfg": 5.0,
+      "variety": false,
+      "decrisper": false,
+      "smea": "none",
+      "sampler": "k_euler",
+      "scheduler": "karras",
+      "seed": 0,
+      "uncond_scale": 1.0,
+      "cfg_rescale": 0.0,
+      "keep_alpha": true,
+      "option": ["1", 0]
+    },
+    "class_type": "GenerateNAID",
+    "_meta": {"title": "NAI 生成 (txt2img)"}
+  },
+  "3": {
+    "inputs": {
+      "filename_prefix": "NAI_v45",
+      "images": ["2", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {"title": "保存图像"}
+  }
+}

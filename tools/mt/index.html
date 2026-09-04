@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>机翻 · Owner</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel-2: #1d212a; --line: #2a2f3a;
+    --fg: #e7e9ee; --muted: #8b93a7; --accent: #7aa2f7; --accent-2: #9ece6a; --warn: #f7768e;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f5f6f8; --panel:#fff; --panel-2:#f0f2f5; --line:#dfe3ea; --fg:#1a1d24; --muted:#6b7280; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--fg); display: flex; flex-direction: column;
+    font: 14px/1.6 "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  }
+  header {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--panel);
+  }
+  .brand { font-weight: 700; letter-spacing: .5px; margin-right: 4px; }
+  .brand span { color: var(--accent); }
+  .seg { display: flex; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+  .seg button {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    padding: 5px 12px; border-radius: 999px; font: inherit; font-size: 13px;
+  }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #0f1115; font-weight: 600; }
+  select, input[type=text] {
+    background: var(--panel-2); color: var(--fg); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 8px; font: inherit; font-size: 13px;
+  }
+  .spacer { flex: 1; }
+  .meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .meta b { color: var(--accent-2); font-weight: 600; }
+  main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); min-height: 0; }
+  @media (max-width: 760px) { main { grid-template-columns: 1fr; } }
+  .pane { background: var(--panel); display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .pane-head {
+    display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+    color: var(--muted); font-size: 12px; border-bottom: 1px solid var(--line);
+  }
+  .pane-head button {
+    border: 1px solid var(--line); background: var(--panel-2); color: var(--muted);
+    border-radius: 6px; padding: 3px 9px; font: inherit; font-size: 12px; cursor: pointer;
+  }
+  .pane-head button:hover { color: var(--fg); border-color: var(--accent); }
+  textarea, #out {
+    flex: 1; min-height: 0; padding: 14px; border: 0; outline: none;
+    background: transparent; color: var(--fg); font: inherit; font-size: 15px;
+    resize: none; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  #out.placeholder { color: var(--muted); }
+  #dir { color: var(--accent); font-weight: 600; }
+  #out .cursor { display: inline-block; width: 7px; height: 1em; vertical-align: -2px;
+    background: var(--accent); animation: blink .9s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  footer {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 8px 14px; border-top: 1px solid var(--line); background: var(--panel); font-size: 12px; color: var(--muted);
+  }
+  #go {
+    border: 0; background: var(--accent); color: #0f1115; font-weight: 700;
+    padding: 8px 20px; border-radius: 8px; cursor: pointer; font: inherit; font-weight: 700;
+  }
+  #go:disabled { opacity: .5; cursor: default; }
+  kbd { background: var(--panel-2); border: 1px solid var(--line); border-bottom-width: 2px;
+    border-radius: 4px; padding: 0 5px; font-size: 11px; }
+  .err { color: var(--warn); }
+  #note { width: 220px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">机<span>翻</span></div>
+  <div class="seg" id="targets">
+    <button data-t="auto" aria-pressed="true">自动</button>
+    <button data-t="zh">→中文</button>
+    <button data-t="ja">→日语</button>
+    <button data-t="en">→English</button>
+  </div>
+  <select id="model" title="模型（flash 便宜，pro 更准）"></select>
+  <input id="note" type="text" placeholder="附加要求（可空，如：口语化 / 保留敬语）">
+  <div class="spacer"></div>
+  <div class="meta" id="meta">余额读取中…</div>
+</header>
+
+<main>
+  <section class="pane">
+    <div class="pane-head">
+      <span>原文</span>
+      <span class="spacer" style="flex:1"></span>
+      <span id="count">0 字</span>
+      <button id="paste">粘贴</button>
+      <button id="clear">清空</button>
+    </div>
+    <textarea id="src" placeholder="粘贴或输入要翻译的内容…&#10;Enter 翻译，Shift+Enter 换行" autofocus></textarea>
+  </section>
+  <section class="pane">
+    <div class="pane-head">
+      <span>译文</span>
+      <span id="dir"></span>
+      <span class="spacer" style="flex:1"></span>
+      <span id="cost"></span>
+      <button id="copy">复制</button>
+    </div>
+    <div id="out" class="placeholder">译文会流式出现在这里。</div>
+  </section>
+</main>
+
+<footer>
+  <button id="go">翻译</button>
+  <span><kbd>Enter</kbd> 翻译 · <kbd>Shift</kbd>+<kbd>Enter</kbd> 换行 · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> 复制 · <kbd>Esc</kbd> 中断</span>
+  <span class="spacer" style="flex:1"></span>
+  <span id="status"></span>
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const src = $('src'), out = $('out'), go = $('go'), statusEl = $('status'), metaEl = $('meta'), costEl = $('cost'), dirEl = $('dir');
+let target = localStorage.getItem('mt.target') || 'auto';
+let pricing = {}, controller = null;
+
+// ---- 目标语言分段控件 ----
+function paintTargets() {
+  for (const b of $('targets').children) b.setAttribute('aria-pressed', String(b.dataset.t === target));
+}
+$('targets').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  target = b.dataset.t; localStorage.setItem('mt.target', target); paintTargets();
+});
+paintTargets();
+
+// ---- 初始化：模型列表 + 余额 ----
+(async () => {
+  try {
+    const meta = await (await fetch('/api/meta')).json();
+    pricing = meta.pricing || {};
+    const saved = localStorage.getItem('mt.model');
+    $('model').innerHTML = meta.model_options
+      .map((m) => `<option value="${m}"${m === (saved || meta.model) ? ' selected' : ''}>${m.replace('deepseek-', '')}</option>`)
+      .join('');
+  } catch { $('model').innerHTML = '<option>deepseek-v4-flash</option>'; }
+  refreshBalance();
+})();
+$('model').addEventListener('change', () => localStorage.setItem('mt.model', $('model').value));
+
+async function refreshBalance() {
+  try {
+    const b = await (await fetch('/api/balance')).json();
+    metaEl.innerHTML = b.balance ? `余额 <b>${b.balance}</b> ${b.currency}` : `<span class="err">余额未知</span>`;
+  } catch { metaEl.textContent = '余额未知'; }
+}
+
+// ---- 字数 ----
+src.addEventListener('input', () => { $('count').textContent = `${src.value.length} 字`; });
+
+// ---- 翻译主流程（SSE 流式）----
+async function translate() {
+  const text = src.value.trim();
+  if (!text || controller) return;
+  controller = new AbortController();
+  go.disabled = true; statusEl.textContent = '翻译中…'; costEl.textContent = ''; dirEl.textContent = '';
+  out.classList.remove('placeholder');
+  out.textContent = '';
+  const cursor = document.createElement('span'); cursor.className = 'cursor'; out.appendChild(cursor);
+
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, target, model: $('model').value, note: $('note').value }),
+      signal: controller.signal,
+    });
+    const reader = resp.body.getReader(), decoder = new TextDecoder();
+    let buf = '';
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const blocks = buf.split('\n\n'); buf = blocks.pop();
+      for (const block of blocks) {
+        const ev = /^event: (.+)$/m.exec(block)?.[1];
+        const dataLine = /^data: (.*)$/m.exec(block)?.[1];
+        if (!ev || dataLine === undefined) continue;
+        const data = JSON.parse(dataLine);
+        if (ev === 'delta') cursor.before(document.createTextNode(data.t));
+        else if (ev === 'lang') dirEl.textContent = `${data.src_name} → ${data.tgt_name}${data.auto ? '' : '（手动）'}`;
+        else if (ev === 'usage') showCost(data);
+        else if (ev === 'error') { statusEl.innerHTML = `<span class="err">${data.message}</span>`; }
+      }
+    }
+    if (!statusEl.textContent.includes('错误') && !statusEl.querySelector('.err')) statusEl.textContent = '完成';
+  } catch (e) {
+    statusEl.innerHTML = e.name === 'AbortError' ? '已中断' : `<span class="err">${e.message}</span>`;
+  } finally {
+    cursor.remove(); controller = null; go.disabled = false;
+    if (!out.textContent) { out.classList.add('placeholder'); out.textContent = '（没有返回内容）'; }
+    refreshBalance();
+  }
+}
+
+function showCost(u) {
+  const p = pricing[$('model').value];
+  const tin = u.prompt_tokens || 0, tout = u.completion_tokens || 0;
+  const yuan = p ? (tin * p.in + tout * p.out) / 1e6 : 0;
+  costEl.textContent = `${tin}+${tout} tok${p ? ` · ≈¥${yuan.toFixed(4)}` : ''}`;
+}
+
+// ---- 按钮与快捷键 ----
+go.addEventListener('click', translate);
+$('clear').addEventListener('click', () => { src.value = ''; src.focus(); src.dispatchEvent(new Event('input')); });
+$('paste').addEventListener('click', async () => {
+  try { src.value = await navigator.clipboard.readText(); src.dispatchEvent(new Event('input')); translate(); }
+  catch { statusEl.textContent = '浏览器拒绝读剪贴板，请手动 Ctrl+V'; src.focus(); }
+});
+$('copy').addEventListener('click', copyOut);
+async function copyOut() {
+  try { await navigator.clipboard.writeText(out.textContent); statusEl.textContent = '已复制译文'; }
+  catch { statusEl.textContent = '复制失败，请手动选中'; }
+}
+src.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  if (e.isComposing || e.keyCode === 229) return;   // 输入法组词中，Enter 是在选字
+  if (e.shiftKey || e.altKey) return;               // 留给换行
+  e.preventDefault();
+  translate();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); translate(); }
+  else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') { e.preventDefault(); copyOut(); }
+  else if (e.key === 'Escape' && controller) { controller.abort(); }
+});
+</script>
+</body>
+</html>

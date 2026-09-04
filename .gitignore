@@ -1,0 +1,23 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Secrets & local config — 绝不提交
+.env
+*.log
+data/nai_config.json
+data/private_blocks.json
+data/*_private.json
+data/terminal/
+data/terminal_token
+data/vault/
+
+# 本地产出
+output/
+*.psd

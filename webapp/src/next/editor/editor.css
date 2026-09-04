@@ -1,0 +1,679 @@
+/* E1 编辑器 — 表现层照抄旧版配方库语言（审美基线铁律，见 internal-docs）：
+   区块头=渐变横幅(.section-header 式)，子块头=左色条浅底组头(.group-header 式)，
+   白卡大圆角、实色按钮、字号跟旧版 0.85-0.95rem，禁 MVP/studio-next 细边框小字残留。 */
+
+.knx .knx-editor-page {
+  max-width: 1480px;
+}
+
+.knx .knx-editor-toolbar,
+.knx .knx-editor-notice,
+.knx .data-warning,
+.knx .translate-status,
+.knx .page-state {
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-12);
+  background: var(--knx-surface);
+  color: var(--knx-text);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx .knx-editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--knx-space-16);
+  align-items: flex-start;
+  padding: var(--knx-space-16) 20px;
+}
+
+.knx .knx-editor-toolbar h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.knx .knx-editor-actions,
+.knx .section-actions,
+.knx .character-controls,
+.knx .character-pickers,
+.knx .inline-input,
+.knx .view-segment,
+.knx .camera-view-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--knx-space-8);
+  align-items: center;
+}
+
+.knx .knx-editor-notice,
+.knx .data-warning,
+.knx .translate-status,
+.knx .page-state {
+  padding: var(--knx-space-12) var(--knx-space-16);
+}
+
+.knx .data-warning {
+  border-color: var(--knx-amber);
+  background: var(--knx-amber-soft);
+}
+
+.knx .prompt-editor,
+.knx .workspace,
+.knx .editor-panel,
+.knx .character-section,
+.knx .character-card-list,
+.knx .character-prompt-groups,
+.knx .character-accessory-groups,
+.knx .preview-panel,
+.knx .preview-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-12);
+}
+
+/* workspace 实际只有 editor-panel 一个孩子——单列全宽，不留死空白列 */
+.knx .workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.knx .editor-panel,
+.knx .character-section,
+.knx .preview-panel {
+  min-width: 0;
+}
+
+/* 顶级区块 = 旧 recipe-card 白卡：radius 16 + 浅影，不再用细色边 */
+.knx .base-section,
+.knx .character-card,
+.knx .preview-panel,
+.knx .picker-modal {
+  border: 1px solid var(--knx-line);
+  border-radius: 16px;
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx .base-section,
+.knx .character-card,
+.knx .preview-panel {
+  padding: var(--knx-space-12) var(--knx-space-16) var(--knx-space-16);
+}
+
+.knx .section-head,
+.knx .character-card-head,
+.knx .char-prompt-group-head,
+.knx .picker-head,
+.knx .subject-area-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--knx-space-10);
+  align-items: center;
+}
+
+/* 区块标题条 = 旧 .section-header 渐变横幅，按区块分类色 */
+.knx .base-section > .section-head,
+.knx .character-section > .section-head,
+.knx .character-card > .character-card-head {
+  --banner-color: var(--section-accent, var(--character-accent, var(--knx-accent)));
+  margin: 0 0 var(--knx-space-10);
+  padding: 8px 16px;
+  border-radius: var(--knx-radius-8);
+  background: linear-gradient(135deg, var(--banner-color), color-mix(in srgb, var(--banner-color) 55%, #ffffff));
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--banner-color) 30%, transparent);
+}
+
+.knx .character-section > .section-head {
+  --banner-color: var(--knx-block-character);
+}
+
+.knx .base-section > .section-head h2,
+.knx .base-section > .section-head h3,
+.knx .character-section > .section-head h2,
+.knx .character-card > .character-card-head,
+.knx .character-card > .character-card-head h3 {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.knx .base-section > .section-head p,
+.knx .character-section > .section-head p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.knx .section-head h2,
+.knx .section-head h3,
+.knx .char-prompt-group-head,
+.knx .picker-head h2 {
+  margin: 0;
+  color: var(--knx-text-strong);
+}
+
+.knx .section-head p,
+.knx .view-status,
+.knx .picker-head p {
+  margin: 0;
+  color: var(--knx-muted);
+  font-size: 0.85rem;
+}
+
+.knx .subject-area-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--knx-space-10);
+}
+
+/* 子块 = 白卡 + 旧 .group-header 式组头（左色条+浅色底） */
+.knx .subject-area-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-8);
+  min-width: 0;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-10);
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx .subject-area-card.is-primary-area {
+  grid-column: 1 / -1;
+}
+
+.knx .subject-area-head {
+  padding: 6px 12px;
+  border-left: 4px solid var(--area-accent, var(--knx-accent));
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--area-accent, var(--knx-accent)) 10%, #ffffff);
+  font-weight: 600;
+}
+
+.knx .chip-zone,
+.knx .picker-tag-table,
+.knx .character-caption-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--knx-space-8);
+  min-height: 40px;
+}
+
+/* 胶囊 = tokens .knx-chip 同语言：白底色染 + 左色条，字大 */
+.knx .prompt-chip {
+  --pc: var(--chip-color, var(--group-accent, var(--knx-accent)));
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  border: 1px solid color-mix(in srgb, var(--pc) 30%, var(--knx-line));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--pc) 6%, var(--knx-surface));
+  overflow: visible;
+  transition: all 0.2s ease;
+}
+
+.knx .prompt-chip:hover {
+  border-color: color-mix(in srgb, var(--pc) 55%, var(--knx-line-strong));
+  box-shadow: var(--knx-shadow-card);
+}
+
+.knx .prompt-chip.is-disabled {
+  opacity: 0.5;
+}
+
+.knx .prompt-chip.is-natural {
+  border-style: dashed;
+}
+
+.knx .chip-bar,
+.knx .picker-color-strip,
+.knx .ptr-bar {
+  width: 4px;
+  flex: 0 0 4px;
+  border-radius: 14px 0 0 14px;
+  background: var(--pc, var(--chip-color, var(--group-accent, var(--knx-accent))));
+}
+
+.knx .chip-thumb,
+.knx .character-card-title img,
+.knx .picker-summary-thumb,
+.knx .picker-group-thumb {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: var(--knx-radius-6);
+  background: var(--knx-surface-3);
+}
+
+/* 小按钮/行 = 白底描边 + hover 上浮（旧按钮语言） */
+.knx .ghost-button,
+.knx .add-button,
+.knx .chip-add-tile,
+.knx .empty-row,
+.knx .picker-summary,
+.knx .accessory-add,
+.knx .icon-button,
+.knx .negative-toggle,
+.knx .picker-area-tabs button,
+.knx .view-segment button,
+.knx .position-grid button,
+.knx .picker-tag-row,
+.knx .picker-item-card {
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  background: var(--knx-surface);
+  color: var(--knx-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.knx .ghost-button,
+.knx .add-button,
+.knx .chip-add-tile,
+.knx .accessory-add,
+.knx .icon-button,
+.knx .negative-toggle {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.knx .ghost-button:hover,
+.knx .add-button:hover,
+.knx .chip-add-tile:hover,
+.knx .accessory-add:hover,
+.knx .icon-button:hover,
+.knx .negative-toggle:hover,
+.knx .picker-area-tabs button:hover,
+.knx .view-segment button:hover {
+  border-color: var(--knx-accent);
+  color: var(--knx-accent-text);
+  transform: translateY(-1px);
+}
+
+.knx .chip-body,
+.knx .remove-chip {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.knx .chip-body {
+  max-width: min(520px, 100%);
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.knx .chip-text {
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--knx-text-strong);
+}
+
+.knx .chip-subtitle,
+.knx .weight-pill,
+.knx .preview-empty,
+.knx .character-thumb-fallback,
+.knx .picker-thumb-fallback {
+  color: var(--knx-muted);
+  font-size: 0.8rem;
+}
+
+.knx .weight-pill {
+  margin-left: var(--knx-space-6);
+  border-radius: var(--knx-radius-pill);
+  padding: 0 var(--knx-space-6);
+  background: var(--knx-accent-soft);
+}
+
+.knx .weight-pill.is-boost {
+  color: var(--knx-ok);
+}
+
+.knx .weight-pill.is-reduce {
+  color: var(--knx-amber);
+}
+
+.knx .remove-chip {
+  padding: 0 var(--knx-space-8);
+  color: var(--knx-danger);
+}
+
+.knx .chip-popover {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--knx-space-6));
+  left: 0;
+  display: grid;
+  gap: var(--knx-space-8);
+  width: 280px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-10);
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-soft);
+}
+
+.knx input,
+.knx textarea,
+.knx select,
+.knx .picker-search {
+  min-width: 0;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: 10px 12px;
+  background: var(--knx-surface);
+  color: var(--knx-text);
+  font-size: 0.92rem;
+}
+
+.knx textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.knx .input-grid,
+.knx .character-input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--knx-space-10);
+}
+
+.knx .tag-input-field,
+.knx .natural-input-field,
+.knx .character-name-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-6);
+  min-width: 0;
+  color: var(--knx-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.knx .switch-row {
+  display: inline-flex;
+  gap: var(--knx-space-6);
+  align-items: center;
+  color: var(--knx-muted);
+}
+
+.knx .position-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 30px);
+  gap: var(--knx-space-4);
+}
+
+.knx .position-grid button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.knx .picker-area-tabs button,
+.knx .view-segment button {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* 选中态 = 旧 block-tab 激活语言：实心蓝白字 */
+.knx .position-grid button.is-active,
+.knx .view-segment button.is-active,
+.knx .picker-area-tabs button.is-active {
+  border-color: var(--knx-nav);
+  background: var(--knx-nav);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+
+.knx .picker-tag-row.is-picked,
+.knx .picker-item-card.is-picked {
+  border-color: var(--knx-nav);
+  background: var(--knx-nav-dim);
+  color: var(--knx-nav-text);
+}
+
+.knx .character-setup,
+.knx .character-setup-side,
+.knx .relation-builder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--knx-space-10);
+  align-items: flex-start;
+}
+
+.knx .character-prompt-groups,
+.knx .character-accessory-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.knx .char-prompt-group,
+.knx .negative-block {
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-10);
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx .char-prompt-group-head {
+  padding: 6px 12px;
+  border-left: 4px solid var(--group-accent, var(--knx-accent));
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--group-accent, var(--knx-accent)) 10%, #ffffff);
+  font-weight: 600;
+}
+
+.knx .preview-panel {
+  cursor: default;
+}
+
+.knx .preview-panel summary {
+  cursor: pointer;
+  color: var(--knx-text-strong);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.knx .preview-block pre,
+.knx .character-caption-list code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-10);
+  background: var(--knx-bg);
+  color: var(--knx-text);
+}
+
+.knx .picker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--knx-space-24);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.knx .picker-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-12);
+  width: min(1120px, 96vw);
+  max-height: 88vh;
+  padding: var(--knx-space-16);
+  box-shadow: var(--knx-shadow-soft);
+}
+
+.knx .picker-scroll {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-12);
+}
+
+.knx .picker-area-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--knx-space-8);
+}
+
+.knx .picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-8);
+}
+
+/* picker 组头 = 旧 .group-header 式 */
+.knx .picker-group-head {
+  padding: 6px 12px;
+  border-left: 4px solid var(--group-accent, var(--knx-accent));
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--group-accent, var(--knx-accent)) 10%, #ffffff);
+  font-weight: 600;
+}
+
+.knx .picker-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--knx-space-10);
+}
+
+.knx .picker-item-card,
+.knx .picker-tag-row {
+  position: relative;
+  display: flex;
+  gap: var(--knx-space-8);
+  align-items: center;
+  min-height: 40px;
+  padding: var(--knx-space-8);
+  text-align: left;
+}
+
+.knx .picker-thumb-wrap {
+  display: flex;
+  gap: var(--knx-space-8);
+  align-items: center;
+  min-width: 0;
+}
+
+.knx .picker-thumb-wrap img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: var(--knx-radius-8);
+}
+
+.knx .picker-card-label,
+.knx .picker-summary-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.knx .ptr-en,
+.knx .ptr-zh,
+.knx .picker-card-label strong,
+.knx .picker-card-label small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knx .picker-hover-thumb {
+  position: fixed;
+  z-index: 120;
+  border: 1px solid var(--knx-line-strong);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-4);
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-soft);
+}
+
+.knx .picker-hover-thumb img {
+  width: 168px;
+  height: 168px;
+  object-fit: cover;
+  border-radius: var(--knx-radius-6);
+}
+
+@media (max-width: 1100px) {
+  .knx .workspace,
+  .knx .subject-area-grid,
+  .knx .character-prompt-groups,
+  .knx .character-accessory-groups,
+  .knx .input-grid,
+  .knx .character-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .knx .knx-editor-toolbar {
+    flex-direction: column;
+  }
+}
+
+/* —— 写回库 diff 弹窗（E2 两级写回）—— */
+.knx .writeback-modal {
+  width: min(760px, 94vw);
+}
+
+.knx .writeback-hint {
+  font-size: 0.82rem;
+}
+
+.knx .writeback-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-10);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.knx .writeback-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: var(--knx-space-10);
+  background: var(--knx-bg);
+  cursor: pointer;
+}
+
+.knx .writeback-item-head {
+  display: flex;
+  align-items: center;
+  gap: var(--knx-space-8);
+  font-size: 0.88rem;
+}
+
+.knx .writeback-old,
+.knx .writeback-new {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  font-size: 0.74rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.knx .writeback-old {
+  background: var(--knx-danger-soft);
+  color: var(--knx-danger-strong);
+}
+
+.knx .writeback-new {
+  background: var(--knx-ok-soft);
+  color: var(--knx-ok-strong);
+}
+
+.knx .writeback-foot {
+  border-top: 1px solid var(--knx-line);
+  padding-top: var(--knx-space-10);
+}

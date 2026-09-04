@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  /* === 品牌色 === */
+  --color-accent: #7c6cf0;
+  --color-accent-hover: #6b5ad8;
+  --color-accent-dim: rgba(124, 108, 240, 0.10);
+  --color-accent-text: #5b4cc4;
+
+  /* === 语义色 === */
+  --color-success: #3ba55d;
+  --color-success-dim: rgba(59, 165, 93, 0.08);
+  --color-danger: #d94444;
+  --color-danger-dim: rgba(217, 68, 68, 0.08);
+  --color-warning: #e8a830;
+  --color-warning-hover: #d09020;
+  --color-warning-dim: rgba(232, 168, 48, 0.10);
+  --color-info: #4a90d9;
+  --color-info-hover: #3a7cc0;
+  --color-info-dim: rgba(74, 144, 217, 0.10);
+
+  /* === 背景色 === */
+  --color-bg: #f7f6f3;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f0eeea;
+  --color-bg-active: #e8e5e0;
+  --color-header-bg: #1e293b;
+
+  /* === 文字色 === */
+  --color-text-primary: #2d2d2d;
+  --color-text-dim: #777777;
+  --color-text-muted: #aaaaaa;
+
+  /* === 边框色 === */
+  --color-border: #e8e5e0;
+  --color-border-hover: #d0cdc6;
+
+  /* === 圆角 === */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* === 阴影 === */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* === 动画 === */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@import "./legacy.css";

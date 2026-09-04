@@ -1,0 +1,126 @@
+{
+  "_comment": "默认工作流模板 — 从参考图片'默认工作流.png'提取，2026-02-22。用户提示更新时重新提取",
+  "3": {
+    "inputs": {
+      "seed": 82231570916025,
+      "steps": 24,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": ["33", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    },
+    "class_type": "KSampler",
+    "_meta": {"title": "K采样器"}
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "awamix_v6_eps_00001_.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {"title": "Checkpoint加载器（简易）"}
+  },
+  "5": {
+    "inputs": {
+      "width": 1352,
+      "height": 1920,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {"title": "空Latent图像"}
+  },
+  "6": {
+    "inputs": {
+      "text": "[正向prompt — 按BLOCK_ORDER + BREAK格式]",
+      "speak_and_recognation": {"__value__": [false, true]},
+      "clip": ["33", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {"title": "CLIP文本编码"}
+  },
+  "7": {
+    "inputs": {
+      "text": "[负向prompt]",
+      "speak_and_recognation": {"__value__": [false, true]},
+      "clip": ["33", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {"title": "CLIP文本编码"}
+  },
+  "8": {
+    "inputs": {
+      "samples": ["3", 0],
+      "vae": ["4", 2]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {"title": "VAE解码"}
+  },
+  "14": {
+    "inputs": {
+      "filename_prefix": "output",
+      "images": ["8", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {"title": "保存图像"}
+  },
+  "24": {
+    "inputs": {
+      "lora_name": "a画风\\rurudo_PonyXL_style_v01.safetensors",
+      "strength_model": 0.4900000000000001,
+      "strength_clip": 0.4900000000000001,
+      "prompt": "",
+      "example": "[none]",
+      "model": ["4", 0],
+      "clip": ["4", 1]
+    },
+    "class_type": "LoraLoader|pysssss",
+    "_meta": {"title": "Lora Loader 🐍"}
+  },
+  "29": {
+    "inputs": {
+      "lora_name": "a画风\\触发词chen_bin _cyan-000008.safetensors",
+      "strength_model": 0.3400000000000001,
+      "strength_clip": 0.3400000000000001,
+      "prompt": "",
+      "example": "[none]",
+      "model": ["24", 0],
+      "clip": ["24", 1]
+    },
+    "class_type": "LoraLoader|pysssss",
+    "_meta": {"title": "Lora Loader 🐍"}
+  },
+  "30": {
+    "inputs": {
+      "lora_name": "a画风\\cyan-000027无触发词.safetensors",
+      "strength_model": 0.31000000000000005,
+      "strength_clip": 0.31000000000000005,
+      "prompt": "",
+      "example": "[none]",
+      "model": ["29", 0],
+      "clip": ["29", 1]
+    },
+    "class_type": "LoraLoader|pysssss",
+    "_meta": {"title": "Lora Loader 🐍"}
+  },
+  "33_角色LoRA槽位": {
+    "_comment": "角色LoRA — 默认智乃，按需替换或删除（删除时将6/7的clip和3的model指向30）",
+    "inputs": {
+      "lora_name": "b我喜欢的\\智乃\\好看亮智乃 c-chino触发 ChinoKafu _ILLUS_c.safetensors",
+      "strength_model": 0.7000000000000002,
+      "strength_clip": 0.7000000000000002,
+      "prompt": "",
+      "example": "[none]",
+      "model": ["30", 0],
+      "clip": ["30", 1]
+    },
+    "class_type": "LoraLoader|pysssss",
+    "_meta": {"title": "Lora Loader 🐍"}
+  },
+  "_removed_nodes": {
+    "13": "VAEDecode — 无samples输入，已删除",
+    "15": "PreviewImage — 无images输入，已删除"
+  }
+}

@@ -1,0 +1,603 @@
+/* Owner Next UI tokens. Everything is scoped under .knx to avoid leaking into the legacy webapp.
+   审美基线铁律（2026-07-08 拍板，见 internal-docs）：唯一审美参考=旧版 webapp（legacy.css）。
+   本文件全部色值/圆角/阴影/过渡从 legacy.css :root 原值提取，明色单主题（旧版无暗色，不造暗色）。 */
+.knx,
+.knx * ,
+.knx *::before,
+.knx *::after {
+  box-sizing: border-box;
+}
+
+.knx {
+  --knx-bg: #f7f6f3;
+  --knx-surface: #ffffff;
+  --knx-surface-2: #ffffff;
+  --knx-surface-3: #f0eeea;
+  --knx-text: #2d2d2d;
+  --knx-text-strong: #1f1f1f;
+  --knx-muted: #777777;
+  --knx-line: #e8e5e0;
+  --knx-line-strong: #d0cdc6;
+  --knx-header-bg: #1e293b;
+  --knx-accent: #7c6cf0;
+  --knx-accent-hover: #6b5ad8;
+  --knx-accent-soft: rgba(124, 108, 240, 0.10);
+  --knx-accent-text: #5b4cc4;
+  --knx-nav: #3b82f6;
+  --knx-nav-hover: #2563eb;
+  --knx-nav-dim: rgba(59, 130, 246, 0.10);
+  --knx-nav-text: #1d4ed8;
+  --knx-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --knx-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --knx-shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --knx-danger: #d94444;
+  --knx-danger-soft: rgba(217, 68, 68, 0.08);
+  --knx-danger-strong: #c73a3a;
+  --knx-ok: #3ba55d;
+  --knx-ok-soft: rgba(59, 165, 93, 0.08);
+  --knx-ok-strong: #2f9050;
+  --knx-amber: #e8a830;
+  --knx-amber-soft: rgba(232, 168, 48, 0.10);
+  --knx-info: #4a90d9;
+  --knx-info-soft: rgba(74, 144, 217, 0.10);
+  --knx-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --knx-block-style: #8b5cf6;
+  --knx-block-sub-style: #d946ef;
+  --knx-block-character: #06b6d4;
+  --knx-block-clothing: #ec4899;
+  --knx-block-action: #f97316;
+  --knx-block-expression: #22c55e;
+  --knx-block-scene: #3b82f6;
+  --knx-block-camera: #6366f1;
+  --knx-block-effect: #eab308;
+
+  --knx-space-4: 4px;
+  --knx-space-6: 6px;
+  --knx-space-8: 8px;
+  --knx-space-10: 10px;
+  --knx-space-12: 12px;
+  --knx-space-16: 16px;
+  --knx-space-24: 24px;
+  --knx-radius-6: 5px;
+  --knx-radius-8: 8px;
+  --knx-radius-12: 12px;
+  --knx-radius-pill: 999px;
+  --knx-font-12: 12.5px;
+  --knx-font-13: 13px;
+  --knx-font-14: 14px;
+  --knx-font-16: 16px;
+  --knx-font-17: 17px;
+  --knx-cw-sm: 150px;
+  --knx-cw-md: 220px;
+  --knx-cw-lg: 300px;
+  --knx-cw: var(--knx-cw-md);
+
+  min-height: calc(100vh - 110px);
+  background: var(--knx-bg);
+  color: var(--knx-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+.knx :where(button, input, textarea, select):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--knx-accent-soft);
+  border-color: var(--knx-accent);
+}
+
+.knx button,
+.knx input,
+.knx textarea,
+.knx select {
+  font: inherit;
+}
+
+.knx button {
+  cursor: pointer;
+}
+
+.knx button:active {
+  transform: translateY(1px);
+}
+
+.knx button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+}
+
+/* 骨相=旧版：上黑下白——顶部深色导航条选大类（.app-header/.header-tab 原样）→（各视图自带）侧边二级导航 → 暖白主区 */
+.knx-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: inherit;
+  background: var(--knx-bg);
+}
+
+.knx-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  margin: 0 -24px;
+  padding: 0 24px;
+  background: var(--knx-header-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* = 旧 .header-logo 原样 */
+.knx-logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+/* = 旧 .header-tabs 原样（logo 与 tabs 间距 32px） */
+.knx-topbar-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 32px;
+}
+
+/* = 旧 .header-actions + .git-sync-wrapper 原样 */
+.knx-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.knx-sync-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.knx-sync-btn {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: var(--knx-radius-6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.knx-sync-btn:hover { color: #e2e8f0; border-color: rgba(255, 255, 255, 0.4); }
+.knx-sync-btn.has-changes { color: var(--knx-amber); border-color: var(--knx-amber); }
+.knx-sync-btn.has-changes:hover { background: rgba(232, 168, 48, 0.15); }
+.knx-sync-syncing { color: var(--knx-info) !important; border-color: var(--knx-info) !important; cursor: wait; }
+.knx-sync-success { color: var(--knx-ok) !important; border-color: var(--knx-ok) !important; }
+.knx-sync-error { color: var(--knx-danger) !important; border-color: var(--knx-danger) !important; }
+
+/* .knx-tab = 旧版 .header-tab 原样：深色方块钮、hover 提亮上浮、active 实心蓝+蓝光 */
+.knx-tab {
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--knx-ease);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.knx-tab:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.knx-tab.is-active {
+  color: #ffffff;
+  background: var(--knx-nav);
+  border-color: var(--knx-nav);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.knx-main {
+  min-width: 0;
+  padding: var(--knx-space-16) var(--knx-space-24) var(--knx-space-24);
+}
+
+.knx-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-16);
+  /* 宽度跟随旧版 .app 容器（1400px 居中），不再自设更窄的上限 */
+}
+
+.knx-page h2,
+.knx-page h3 {
+  margin: 0;
+  color: var(--knx-text-strong);
+}
+
+.knx-page p {
+  margin: 0;
+  color: var(--knx-muted);
+  line-height: 1.7;
+}
+
+.knx-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-12);
+}
+
+.knx-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--knx-space-8);
+  color: var(--knx-text-strong);
+  font-size: var(--knx-font-16);
+  font-weight: 700;
+}
+
+.knx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--knx-space-6);
+  min-height: 34px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  padding: 0 var(--knx-space-16);
+  background: var(--knx-surface);
+  color: var(--knx-text);
+  font-size: var(--knx-font-14);
+  font-weight: 600;
+  box-shadow: var(--knx-shadow-sm);
+  transition: all 0.25s var(--knx-ease);
+}
+
+.knx-btn:hover {
+  border-color: var(--knx-line-strong);
+  background: var(--knx-surface-3);
+  transform: translateY(-1px);
+}
+
+/* 实色按钮 = 旧版按钮语言（紫=品牌/编辑，绿=新增/复制，红=删除） */
+.knx-btn-primary {
+  border-color: var(--knx-accent);
+  background: var(--knx-accent);
+  color: #ffffff;
+}
+
+.knx-btn-primary:hover {
+  border-color: var(--knx-accent-hover);
+  background: var(--knx-accent-hover);
+  box-shadow: 0 4px 8px rgba(124, 108, 240, 0.4);
+}
+
+.knx-btn-ok {
+  border-color: var(--knx-ok);
+  background: var(--knx-ok);
+  color: #ffffff;
+}
+
+.knx-btn-ok:hover {
+  border-color: var(--knx-ok-strong);
+  background: var(--knx-ok-strong);
+  box-shadow: 0 4px 8px rgba(59, 165, 93, 0.4);
+}
+
+.knx-btn-danger {
+  border-color: var(--knx-danger);
+  background: var(--knx-danger);
+  color: #ffffff;
+}
+
+.knx-btn-danger:hover {
+  border-color: var(--knx-danger-strong);
+  background: var(--knx-danger-strong);
+  box-shadow: 0 4px 8px rgba(217, 68, 68, 0.4);
+}
+
+.knx-btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--knx-muted);
+}
+
+.knx-btn-ghost:hover {
+  border-color: var(--knx-line);
+  background: var(--knx-surface-3);
+  color: var(--knx-text);
+}
+
+.knx-btn.is-active {
+  border-color: var(--knx-nav);
+  background: var(--knx-nav-dim);
+  color: var(--knx-nav-text);
+  box-shadow: none;
+}
+
+.knx-card {
+  width: var(--knx-cw);
+  min-height: 116px;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+  padding: var(--knx-space-12);
+  transition: all 0.25s var(--knx-ease);
+}
+
+.knx-card:hover {
+  border-color: var(--knx-line-strong);
+  box-shadow: var(--knx-shadow-card);
+  transform: translateY(-1px);
+}
+
+.knx-chip {
+  --knx-chip-color: var(--knx-accent);
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  max-width: min(360px, 100%);
+  min-height: 48px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--knx-chip-color) 30%, var(--knx-line));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--knx-chip-color) 6%, var(--knx-surface));
+  color: var(--knx-text);
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+}
+
+.knx-chip:hover {
+  border-color: color-mix(in srgb, var(--knx-chip-color) 55%, var(--knx-line-strong));
+  background: color-mix(in srgb, var(--knx-chip-color) 12%, var(--knx-surface));
+  box-shadow: var(--knx-shadow-card);
+}
+
+.knx-chip-bar {
+  width: 4px;
+  flex: 0 0 4px;
+  background: var(--knx-chip-color);
+}
+
+.knx-chip-body {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 5px 10px;
+  text-align: left;
+}
+
+.knx-chip-en {
+  overflow: hidden;
+  color: var(--knx-text-strong);
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knx-chip-zh {
+  color: var(--knx-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.knx-chip.is-strong {
+  --knx-chip-color: var(--knx-amber);
+}
+
+.knx-chip.is-weak {
+  --knx-chip-color: var(--knx-accent);
+}
+
+.knx-chip.is-disabled {
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.knx-chip.is-disabled .knx-chip-en {
+  text-decoration: line-through;
+}
+
+.knx-chip.is-natural {
+  max-width: min(640px, 100%);
+}
+
+.knx-chip.is-natural .knx-chip-en {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.knx-chip.is-natural .knx-chip-bar {
+  width: 5px;
+  flex-basis: 5px;
+}
+
+.knx-group {
+  --knx-group-color: var(--knx-accent);
+  margin: 0;
+  border-left: 6px solid var(--knx-group-color);
+  border-radius: 0 var(--knx-radius-12) var(--knx-radius-12) 0;
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx-group-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--knx-space-10);
+  padding: 9px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--knx-group-color) 30%, var(--knx-line));
+  border-radius: 0 var(--knx-radius-12) 0 0;
+  background: color-mix(in srgb, var(--knx-group-color) 10%, var(--knx-surface));
+}
+
+.knx-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 3px;
+  background: var(--knx-group-color);
+}
+
+.knx-group-name {
+  color: var(--knx-text-strong);
+  font-size: var(--knx-font-16);
+  font-weight: 700;
+}
+
+.knx-group-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--knx-space-12);
+  padding: var(--knx-space-12) 14px 14px;
+}
+
+.knx-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--knx-space-6);
+}
+
+.knx-field label,
+.knx-label {
+  color: var(--knx-muted);
+  font-size: var(--knx-font-12);
+  font-weight: 600;
+}
+
+.knx-input,
+.knx-textarea,
+.knx-select {
+  width: 100%;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  background: var(--knx-surface-2);
+  color: var(--knx-text);
+  padding: 8px 10px;
+  font-size: var(--knx-font-13);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.knx-input:hover,
+.knx-textarea:hover,
+.knx-select:hover {
+  border-color: var(--knx-line-strong);
+}
+
+.knx-textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.knx-table {
+  display: grid;
+  border: 1px solid var(--knx-line);
+  border-radius: var(--knx-radius-8);
+  overflow: hidden;
+  background: var(--knx-surface);
+  box-shadow: var(--knx-shadow-sm);
+}
+
+.knx-table-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.8fr) auto;
+  align-items: center;
+  min-height: 42px;
+  border-bottom: 1px solid var(--knx-line);
+}
+
+.knx-table-row:last-child {
+  border-bottom: 0;
+}
+
+.knx-table-row:hover {
+  background: var(--knx-surface-3);
+}
+
+.knx-table-cell {
+  min-width: 0;
+  padding: 8px 10px;
+  color: var(--knx-text);
+  font-size: var(--knx-font-13);
+}
+
+.knx-table-cell + .knx-table-cell {
+  border-left: 1px solid var(--knx-line);
+}
+
+.knx-table-head {
+  background: var(--knx-surface-3);
+  color: var(--knx-text-strong);
+  font-weight: 600;
+}
+
+.knx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--knx-space-12);
+}
+
+.knx-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--knx-space-8);
+}
+
+.knx-muted {
+  color: var(--knx-muted);
+}
+
+.knx-cw-sm {
+  --knx-cw: var(--knx-cw-sm);
+}
+
+.knx-cw-md {
+  --knx-cw: var(--knx-cw-md);
+}
+
+.knx-cw-lg {
+  --knx-cw: var(--knx-cw-lg);
+}
+
+@media (max-width: 760px) {
+  .knx-topbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .knx-main {
+    padding: var(--knx-space-16);
+  }
+
+  .knx-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .knx-table-cell + .knx-table-cell {
+    border-left: 0;
+    border-top: 1px solid var(--knx-line);
+  }
+}

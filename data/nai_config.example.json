@@ -1,0 +1,82 @@
+{
+  "_comment": "NAI API 配置模板。复制为 nai_config.json 并填入真实 Token 后使用。真实文件已在 .gitignore 中。",
+
+  "api_key": "<YOUR_NAI_PERSISTENT_TOKEN>",
+  "proxy": "",
+  "output_folder": "output/nai",
+
+  "default_params": {
+    "model": "nai-diffusion-4-5-full",
+    "width": 832,
+    "height": 1216,
+    "scale": 5.0,
+    "sampler": "k_euler",
+    "steps": 28,
+    "n_samples": 1,
+    "ucPreset": 0,
+    "qualityToggle": true,
+    "dynamic_thresholding": false,
+    "controlnet_strength": 1.0,
+    "legacy": false,
+    "add_original_image": false,
+    "uncond_scale": 1.0,
+    "cfg_rescale": 0.1,
+    "noise_schedule": "karras",
+    "legacy_uc": false,
+    "variety_plus": true,
+    "auto_position": true,
+    "negative_prompt": ""
+  },
+
+  "batch": {
+    "interval_seconds": 1,
+    "interval_jitter_min": 0,
+    "interval_jitter_max": 0,
+    "retry_on_429_enabled": false,
+    "retry_on_429_delay_sec": 10,
+    "max_retries": 3,
+    "batch_count": 1,
+    "number_of_requests": 0,
+    "v5_usage_warn_percent": 20,
+    "v5_usage_block_percent": 0,
+    "v5_usage_cache_sec": 60
+  },
+  "size_presets": [],
+  "default_base_blocks": [
+    { "name": "画风质量", "text": "masterpiece, best quality, very aesthetic, absurdres,", "enabled": true },
+    { "name": "画师串", "text": "", "enabled": false },
+    { "name": "次画风", "text": "", "enabled": false, "isPrivate": true },
+    { "name": "角色特征", "text": "", "enabled": false },
+    { "name": "衣服", "text": "", "enabled": false },
+    { "name": "动作", "text": "", "enabled": false },
+    { "name": "表情", "text": "", "enabled": false },
+    { "name": "场景", "text": "", "enabled": false },
+    { "name": "镜头机位", "text": "", "enabled": false }
+  ],
+
+  "augmentation": {
+    "_comment": "固定加装层：bare CLI 批量跑图自动套用（json-stdin 不套）。隐私 block 的 text 存 data/private_blocks.json 的 nai_aug:<key>。base 块用 position(prefix/suffix)；char 块用 x/y + char_index(1-based)。",
+    "enabled": true,
+    "blocks": [
+      { "key": "base_positive", "name": "特殊质量/画师词", "text": "", "enabled": false, "position": "prefix", "isPrivate": false },
+      { "key": "base_negative", "name": "基础负面词", "text": "", "enabled": false, "position": "suffix", "isPrivate": false },
+      { "key": "char_positive", "name": "角色正面词", "text": "", "enabled": false, "isPrivate": false, "x": 0.5, "y": 0.5, "char_index": 1 },
+      { "key": "char_negative", "name": "角色负面词", "text": "", "enabled": false, "isPrivate": false }
+    ]
+  },
+
+  "replacements": {
+    "_comment": "替换规则：注入加装层之后的最后一道，对最终 prompt 全做一遍（bare CLI 专属）。每条 {id, from(每行一个源词), to, enabled, wholeWord(整词), isPrivate}。隐私规则的 from/to 存 private_blocks.json 的 nai_repl:<id>={from,to}。",
+    "enabled": true,
+    "rules": []
+  },
+
+  "_notes": {
+    "model_choices": "nai-diffusion-3 / nai-diffusion-4-curated-preview / nai-diffusion-4-full / nai-diffusion-4-5-curated / nai-diffusion-4-5-full / nai-diffusion-5-curated / nai-diffusion-5-full",
+    "v5_note": "V5（nai-diffusion-5-*）不在 Opus 无限额度内，走独立配额池：batch.v5_usage_warn_percent=余量低于此值告警（默认 20），v5_usage_block_percent=低于此值拒绝开批（默认 0=关闭），v5_usage_cache_sec=余量查询缓存秒数（默认 60）。V5 自动使用 params_version=4，且不支持 Precise Reference / Vibe Transfer。",
+    "sampler_choices": "k_euler / k_euler_ancestral / k_dpmpp_2s_ancestral / k_dpmpp_2m_sde / k_dpmpp_sde / k_dpmpp_2m",
+    "noise_schedule": "native / karras / exponential / polyexponential (V4 系列建议 karras)",
+    "proxy": "格式 host:port，例如 127.0.0.1:7890；留空走直连",
+    "output_folder": "可以是 WSL 相对路径或 Windows 绝对路径（如 C:\\Users\\xxx\\Pictures\\NAI）"
+  }
+}
